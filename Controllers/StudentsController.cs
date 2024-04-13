@@ -19,12 +19,18 @@ namespace CollegeWebApplication.Controllers
         }
 
         // GET: Students
-        public async Task<IActionResult> Index(string searchString)
+        public async Task<IActionResult> Index(string studentGroup,string searchString)
         {
             if(_context.Students == null)
             {
                 return Problem("Entity set 'MvcStudentContext.Student is null");
             }
+
+            IQueryable<string> groupsQuery = from s in _context.Students
+                                             orderby s.IdGroupNavigation.NameGroup
+                                             select s.IdGroupNavigation.NameGroup;
+            //var groups = _context.GroupColleges.ToList();
+            //var selectList = new SelectList(await groupsQuery.Distinct().ToListAsync(), "IdGroup", "NameGroup");
 
             var students = from s in _context.Students
                            select s;
@@ -34,9 +40,21 @@ namespace CollegeWebApplication.Controllers
                 students = students.Where(s => s.SurnameStudent.Contains(searchString));
             }
 
-            return View(await students
-                        .Include(s =>s.IdGroupNavigation)
-                        .ToListAsync());
+            if (!string.IsNullOrEmpty(studentGroup))
+            {
+                //Console.WriteLine("Searching for group: " + studentGroup);
+                students = students.Where(s => s.IdGroupNavigation.NameGroup == studentGroup);
+            }
+
+            var studentGroupVM = new StudentGroupViewModel
+            {
+                Groups = new SelectList(await groupsQuery.Distinct().ToListAsync()),
+                Students = await students
+                        .Include(s => s.IdGroupNavigation)
+                        .ToListAsync()
+            };
+
+            return View(studentGroupVM);
             //var collegeContext = _context.Students.Include(s => s.IdGroupNavigation);
             //return View(await collegeContext.ToListAsync());
         }

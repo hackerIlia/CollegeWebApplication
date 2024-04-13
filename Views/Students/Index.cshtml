@@ -1,4 +1,5 @@
-﻿@model IEnumerable<CollegeWebApplication.Models.Student>
+﻿@* @model IEnumerable<CollegeWebApplication.Models.Student> *@
+    @model CollegeWebApplication.Models.StudentGroupViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -12,6 +13,9 @@
 
 <form asp-controller="Students" asp-action="Index" method="get">
     <p>
+        <select asp-for="StudentGroup" asp-items="Model.Groups">
+            <option value="">All</option>
+        </select>
         Surname: <input type="text" name="SearchString" />
         <input type="submit" value="Search" />
     </p>
@@ -21,22 +25,22 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.NameStudent)
+                @Html.DisplayNameFor(model => model.Students![0].NameStudent)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SurnameStudent)
+                @Html.DisplayNameFor(model => model.Students![0].SurnameStudent)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.YearOfStudy)
+                @Html.DisplayNameFor(model => model.Students![0].YearOfStudy)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IdGroupNavigation)
+                @Html.DisplayNameFor(model => model.Students![0].IdGroupNavigation)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Students!) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.NameStudent)
