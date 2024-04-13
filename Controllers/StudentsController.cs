@@ -47,7 +47,7 @@ namespace CollegeWebApplication.Controllers
         // GET: Students/Create
         public IActionResult Create()
         {
-            ViewData["IdGroup"] = new SelectList(_context.GroupColleges, "IdGroup", "IdGroup");
+            ViewData["IdGroup"] = new SelectList(_context.GroupColleges, "IdGroup", "NameGroup");
             return View();
         }
 
@@ -64,7 +64,7 @@ namespace CollegeWebApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdGroup"] = new SelectList(_context.GroupColleges, "IdGroup", "IdGroup", student.IdGroup);
+            ViewData["IdGroup"] = new SelectList(_context.GroupColleges, "IdGroup", "NameGroup");
             return View(student);
         }
 
@@ -81,7 +81,7 @@ namespace CollegeWebApplication.Controllers
             {
                 return NotFound();
             }
-            ViewData["IdGroup"] = new SelectList(_context.GroupColleges, "IdGroup", "IdGroup", student.IdGroup);
+            ViewData["IdGroup"] = new SelectList(_context.GroupColleges, "IdGroup", "NameGroup");
             return View(student);
         }
 
@@ -117,7 +117,7 @@ namespace CollegeWebApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdGroup"] = new SelectList(_context.GroupColleges, "IdGroup", "IdGroup", student.IdGroup);
+            ViewData["IdGroup"] = new SelectList(_context.GroupColleges, "IdGroup", "NameGroup");
             return View(student);
         }
 

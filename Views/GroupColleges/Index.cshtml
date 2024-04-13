@@ -28,8 +28,8 @@
                 @Html.DisplayFor(modelItem => item.NameGroup)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IdTeahcerNavigation.NameTeahcer)
                 @Html.DisplayFor(modelItem => item.IdTeahcerNavigation.SurnameTeacher)
+                @Html.DisplayFor(modelItem => item.IdTeahcerNavigation.NameTeahcer)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.IdGroup">Edit</a> |
