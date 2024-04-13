@@ -2,9 +2,17 @@
 
 @{
     ViewData["Title"] = "Index";
+    var errorMessage = TempData["ErrorMessage"] as string;
 }
 
 <h1>Index</h1>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger" role="alert">
+        @errorMessage
+    </div>
+}
 
 <p>
     <a asp-action="Create">Create New</a>

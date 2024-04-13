@@ -19,10 +19,32 @@ namespace CollegeWebApplication.Controllers
         }
 
         // GET: Students
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            var collegeContext = _context.Students.Include(s => s.IdGroupNavigation);
-            return View(await collegeContext.ToListAsync());
+            if(_context.Students == null)
+            {
+                return Problem("Entity set 'MvcStudentContext.Student is null");
+            }
+
+            var students = from s in _context.Students
+                           select s;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                students = students.Where(s => s.SurnameStudent.Contains(searchString));
+            }
+
+            return View(await students
+                        .Include(s =>s.IdGroupNavigation)
+                        .ToListAsync());
+            //var collegeContext = _context.Students.Include(s => s.IdGroupNavigation);
+            //return View(await collegeContext.ToListAsync());
+        }
+
+        [HttpPost]
+        public string Index(string searchString,bool notUsed)
+        {
+            return "From [HttpPost]Index: filter on " + searchString;
         }
 
         // GET: Students/Details/5

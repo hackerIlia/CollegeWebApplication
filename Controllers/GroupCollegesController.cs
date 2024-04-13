@@ -145,13 +145,24 @@ namespace CollegeWebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var groupCollege = await _context.GroupColleges.FindAsync(id);
-            if (groupCollege != null)
+            var groupCollege = await _context.GroupColleges
+                .Include(g => g.Students)
+                .FirstOrDefaultAsync(g => g.IdGroup == id);
+
+            if (groupCollege == null)
             {
-                _context.GroupColleges.Remove(groupCollege);
+                return NotFound();
             }
 
+            if (groupCollege.Students.Any())
+            {
+                TempData["ErrorMessage"] = "Cannot delete group because there is at least one student registred in it.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            _context.GroupColleges.Remove(groupCollege);
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 

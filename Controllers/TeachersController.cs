@@ -154,13 +154,23 @@ namespace CollegeWebApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var teacher = await _context.Teachers.FindAsync(id);
-            if (teacher != null)
+            var teacher = await _context.Teachers
+                .Include(t => t.GroupColleges)
+                .FirstOrDefaultAsync(t => t.IdTeacher == id);
+            if (teacher == null)
             {
-                _context.Teachers.Remove(teacher);
+                return NotFound();
             }
 
+            if (teacher.GroupColleges.Any())
+            {
+                TempData["ErrorMessage"] = "Cannot delete teacher because s(he) is associated with group.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            _context.Teachers.Remove(teacher);
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 
