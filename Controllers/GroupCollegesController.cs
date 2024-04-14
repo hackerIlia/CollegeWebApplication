@@ -60,6 +60,16 @@ namespace CollegeWebApplication.Controllers
         {
             if (ModelState.IsValid)
             {
+                var teahcer = await _context.Teachers
+                    .FirstOrDefaultAsync(t => t.IdTeacher == groupCollege.IdTeahcer && t.GroupColleges.Any());
+
+                if(teahcer != null)
+                {
+                    TempData["ErrorMessage"] = $"Teahcer {teahcer.SurnameTeacher} {teahcer.NameTeahcer} is already assigned to another group.";
+                    ViewData["IdTeahcer"] = new SelectList(_context.Teachers.Select(t => new { t.IdTeacher, FullName = t.NameTeahcer + " " + t.SurnameTeacher }), "IdTeacher", "FullName");
+                    return View(groupCollege);
+                }
+
                 _context.Add(groupCollege);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -99,6 +109,16 @@ namespace CollegeWebApplication.Controllers
 
             if (ModelState.IsValid)
             {
+                var teahcer = await _context.Teachers
+                    .FirstOrDefaultAsync(t => t.IdTeacher == groupCollege.IdTeahcer && t.GroupColleges.Any(g => g.IdGroup != id));
+
+                if (teahcer != null)
+                {
+                    TempData["ErrorMessage"] = $"Teahcer {teahcer.SurnameTeacher} {teahcer.NameTeahcer} is already assigned to another group.";
+                    ViewData["IdTeahcer"] = new SelectList(_context.Teachers.Select(t => new { t.IdTeacher, FullName = t.NameTeahcer + " " + t.SurnameTeacher }), "IdTeacher", "FullName");
+                    return View(groupCollege);
+                }
+
                 try
                 {
                     _context.Update(groupCollege);
