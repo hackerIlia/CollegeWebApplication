@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CollegeWebApplication.Models;
 using PagedList;
+using X.PagedList;
 
 namespace CollegeWebApplication.Controllers
 {
@@ -20,12 +21,18 @@ namespace CollegeWebApplication.Controllers
         }
 
         // GET: Students
-        public async Task<IActionResult> Index(string studentGroup,string searchString)
+        public async Task<IActionResult> Index(int? page,string studentGroup,string searchString,string sortOrder)
         {
             if(_context.Students == null)
             {
                 return Problem("Entity set 'MvcStudentContext.Student is null");
             }
+            if(searchString != null)
+            {
+                page = 1;
+            }
+
+            
 
             IQueryable<string> groupsQuery = from s in _context.Students
                                              orderby s.IdGroupNavigation.NameGroup
@@ -35,6 +42,36 @@ namespace CollegeWebApplication.Controllers
 
             var students = from s in _context.Students
                            select s;
+
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name" : "name_desc";
+            ViewData["SurnameSortParam"] = sortOrder == "Surname" ? "surname_desc" : "surname";
+            ViewData["YearSortParam"] = sortOrder == "Year" ? "year_desc" : "year";
+
+            switch (sortOrder)
+            {
+                case "surname":
+                    students = students.OrderBy(s => s.SurnameStudent);
+                    break;
+                case "surname_desc":
+                    students = students.OrderByDescending(s => s.SurnameStudent);
+                    break;
+                case "year_desc":
+                    students = students.OrderByDescending(s => s.YearOfStudy);
+                    break;
+                case "year":
+                    students = students.OrderBy(s => s.YearOfStudy);
+                    break;
+                case "name":
+                    students = students.OrderBy(s => s.NameStudent);
+                    break;
+                case "name_desc":
+                    students = students.OrderByDescending(s => s.NameStudent);
+                    break;
+                default:
+                    students = students.OrderBy(s => s.SurnameStudent);
+                    break;
+            }
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -47,12 +84,20 @@ namespace CollegeWebApplication.Controllers
                 students = students.Where(s => s.IdGroupNavigation.NameGroup == studentGroup);
             }
 
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+
             var studentGroupVM = new StudentGroupViewModel
             {
                 Groups = new SelectList(await groupsQuery.Distinct().ToListAsync()),
+                StudentGroup = studentGroup,
+                SearchString = searchString,
+                Page = page,
+                PageSize = 5,
                 Students = await students
                         .Include(s => s.IdGroupNavigation)
-                        .ToListAsync()
+                        //.OrderBy(s => s.SurnameStudent)
+                        .ToPagedListAsync(page ?? 1, 5)
             };
 
             return View(studentGroupVM);

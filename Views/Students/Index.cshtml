@@ -1,5 +1,7 @@
 ﻿@* @model IEnumerable<CollegeWebApplication.Models.Student> *@
     @model CollegeWebApplication.Models.StudentGroupViewModel
+    @using X.PagedList.Mvc
+    @using System.Web
 
 @{
     ViewData["Title"] = "Index";
@@ -11,6 +13,7 @@
     <a asp-action="Create">Create New</a>
 </p>
 
+
 <form asp-controller="Students" asp-action="Index" method="get">
     <p>
         <select asp-for="StudentGroup" asp-items="Model.Groups">
@@ -21,17 +24,19 @@
     </p>
 </form>
 
+
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Students![0].NameStudent)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParam"]">@Html.DisplayNameFor(model => model.Students![0].NameStudent)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Students![0].SurnameStudent)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["SurnameSortParam"]">@Html.DisplayNameFor(model => model.Students![0].SurnameStudent)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Students![0].YearOfStudy)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["YearSortParam"]">@Html.DisplayNameFor(model => model.Students![0].YearOfStudy)</a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Students![0].IdGroupNavigation)
@@ -63,3 +68,32 @@
 }
     </tbody>
 </table>
+
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        @if (Model.Students.HasPreviousPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("Index", new { page = Model.Students.PageNumber - 1, studentGroup = Model.StudentGroup, searchString = Model.SearchString })" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                    <span class="sr-only">Previous</span>
+                </a>
+            </li>
+        }
+        @for (var i = 1; i <= Model.Students.PageCount; i++)
+        {
+            <li class="page-item @(i == Model.Students.PageNumber ? "active" : "")">
+                <a class="page-link" href="@Url.Action("Index", new { page = i, studentGroup = Model.StudentGroup, searchString = Model.SearchString })">@i</a>
+            </li>
+        }
+        @if (Model.Students.HasNextPage)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("Index", new { page = Model.Students.PageNumber + 1, studentGroup = Model.StudentGroup, searchString = Model.SearchString })" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </li>
+        }
+    </ul>
+</nav>

@@ -1,0 +1,31 @@
+﻿<div>
+    @for (int i = 1; i <= TotalPages; i++)
+    {
+        <button @onclick="(() => ChangePage(i))" disabled="@IsCurrentPage(i)">@i</button>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public int TotalPages { get; set; }
+
+    [Parameter]
+    public int CurrentPage { get; set; }
+
+    [Parameter]
+    public EventCallback<int> PageChanged { get; set; }
+
+    private bool IsCurrentPage(int page)
+    {
+        return page == CurrentPage;
+    }
+
+    private async Task ChangePage(int page)
+    {
+        if (page != CurrentPage)
+        {
+            CurrentPage = page;
+            await PageChanged.InvokeAsync(page);
+        }
+    }
+}

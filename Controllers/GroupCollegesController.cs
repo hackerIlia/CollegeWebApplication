@@ -65,7 +65,7 @@ namespace CollegeWebApplication.Controllers
 
                 if(teahcer != null)
                 {
-                    TempData["ErrorMessage"] = $"Teahcer {teahcer.SurnameTeacher} {teahcer.NameTeahcer} is already assigned to another group.";
+                    TempData["ErrorMessage"] = $"Teacher {teahcer.SurnameTeacher} {teahcer.NameTeahcer} is already assigned to another group.";
                     ViewData["IdTeahcer"] = new SelectList(_context.Teachers.Select(t => new { t.IdTeacher, FullName = t.NameTeahcer + " " + t.SurnameTeacher }), "IdTeacher", "FullName");
                     return View(groupCollege);
                 }
@@ -114,7 +114,7 @@ namespace CollegeWebApplication.Controllers
 
                 if (teahcer != null)
                 {
-                    TempData["ErrorMessage"] = $"Teahcer {teahcer.SurnameTeacher} {teahcer.NameTeahcer} is already assigned to another group.";
+                    TempData["ErrorMessage"] = $"Teacher {teahcer.SurnameTeacher} {teahcer.NameTeahcer} is already assigned to another group.";
                     ViewData["IdTeahcer"] = new SelectList(_context.Teachers.Select(t => new { t.IdTeacher, FullName = t.NameTeahcer + " " + t.SurnameTeacher }), "IdTeacher", "FullName");
                     return View(groupCollege);
                 }
