@@ -44,7 +44,7 @@ namespace CollegeWebApplication.Controllers
                            select s;
 
             ViewData["CurrentSort"] = sortOrder;
-            ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name" : "name_desc";
+            ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name" : "";
             ViewData["SurnameSortParam"] = sortOrder == "Surname" ? "surname_desc" : "surname";
             ViewData["YearSortParam"] = sortOrder == "Year" ? "year_desc" : "year";
 

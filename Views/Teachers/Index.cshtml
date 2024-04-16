@@ -5,7 +5,9 @@
     var errorMessage = TempData["ErrorMessage"] as string;
 }
 
-<h1>Index</h1>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-... (the actual integrity hash)" crossorigin="anonymous" />
+
+<h1>Teachers</h1>
 
 @if (!string.IsNullOrEmpty(errorMessage))
 {
@@ -45,9 +47,9 @@
                 @Html.DisplayFor(modelItem => item.Degree)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IdTeacher">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdTeacher">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdTeacher">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.IdTeacher"><i class="fas fa-edit"></i></a> |
+                    <a asp-action="Details" asp-route-id="@item.IdTeacher"><i class="fas fa-info-circle"></i></a> |
+                    <a asp-action="Delete" asp-route-id="@item.IdTeacher"><i class="fas fa-trash-alt"></i></a>
             </td>
         </tr>
 }

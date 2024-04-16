@@ -2,7 +2,56 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<style>
+    #welcome {
+        font-size: 54px; 
+        color: deepskyblue; 
+        text-align: center;
+    }
+    body{
+        background-color: #cedff5;
+    }
+
+    #info{
+        text-align: center;
+        color: deepskyblue;
+        font-size: 30px;
+    }
+
+    .flex{
+        margin-top: 100px;
+        display: flex;
+        flex-direction: row;
+        justify-content:space-around;
+    }
+
+    .flexCol{
+        display: flex;
+        flex-direction: column;
+    }
+    span{
+        text-align: center;
+    }
+    
+</style>
+
+<body>
+    <div>
+        <p id="welcome">Welcome</p>
+        <p id="info">to college application</p>
+    </div>
+    <div class="flex">
+        <div class="flexCol">
+            <a asp-area="" asp-controller="Teachers" asp-action="Index"><img src="~/images/teacher.png" /></a>
+            <span>Teachers</span>
+        </div>
+        <div class="flexCol">
+            <a asp-area="" asp-controller="Students" asp-action="Index"><img src="~/images/students.png" /></a>
+            <span>Students</span>
+        </div>
+        <div class="flexCol">
+            <a asp-area="" asp-controller="GroupColleges" asp-action="Index"><img src="~/images/group.png" /></a>
+            <span>Groups</span>
+        </div>
+    </div>
+</body>

@@ -9,6 +9,9 @@
 
   <ItemGroup>
     <None Include="efpt.config.json.user" />
+    <None Include="wwwroot\images\group.png" />
+    <None Include="wwwroot\images\students.png" />
+    <None Include="wwwroot\images\teacher.png" />
   </ItemGroup>
 
   <ItemGroup>
